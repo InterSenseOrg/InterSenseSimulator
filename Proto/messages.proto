@@ -1,0 +1,621 @@
+syntax = "proto3";
+package google.protobuf;
+option csharp_namespace = "Protobuf.Messages";
+
+message CommonMessage {
+    oneof message {
+        Vector3 Vector3 = 1;
+        Twist Twist = 2;
+        Detection2D Detection2D = 3;
+        Detection3D Detection3D = 4;
+        PointENU PointENU = 5;
+        PointLLH PointLLH = 6;
+        Point2D Point2D = 7;
+        Point3D Point3D = 8;
+        Quaternion Quaternion = 9;
+        Polygon Polygon = 10;
+        Pose Pose = 11;
+        Header Header = 12;
+        PointXYZIT PointXYZIT = 13;
+        PointCloudData PointCloudData = 14;
+        PointCloud PointCloud = 15;
+        Image Image = 16;
+        CompressedImage CompressedImage = 17;
+        CameraStatus CameraStatus = 18;
+        SyncMessage SyncMessage = 19;
+        Detection2DArray Detection2DArray = 20;        
+        Detection3DArray Detection3DArray = 21;
+        DetectionRailwayArray DetectionRailwayArray = 22;
+        BoundingBox3D BoundingBox3D = 23;
+        BBox2D BBox2D = 24;
+        LightStatus LightStatus = 25;
+        SensorMeasurement SensorMeasurement = 26;
+        TrajectoryPoint TrajectoryPoint = 27;
+        GaussianInfo GaussianInfo = 28;
+        Trajectory Trajectory = 29;
+        GnssNavPvt GnssNavPvt = 30;
+        VehicleSignal VehicleSignal = 31;
+        Sonar Sonar = 32;
+        OusterImu OusterImu = 33;
+        ContiRadarObs ContiRadarObs = 34;
+        ClusterListStatus_600 ClusterListStatus_600 = 35;
+        ObjectListStatus_60A ObjectListStatus_60A = 36;
+        RadarState_201 RadarState_201 = 37;
+        ContiRadar ContiRadar = 38;
+        PathPoint PathPoint = 39;
+        Tag Tag = 40;
+    }
+}
+
+enum Class {
+  UNKNOWN = 0;
+  UNKNOWN_MOVABLE = 1;
+  UNKNOWN_UNMOVABLE = 2;
+  PERSON = 3;  // Pedestrian, usually determined by moving behavior.
+  TRAIN = 4;
+  AUTO = 5;     // Passenger car, truck, bike or motocyle.
+  ANIMAL = 6;
+  LIGHT = 7;	
+  LETTER_PLATE = 8;
+  SWITCH = 9;
+  SIGN = 10;
+  INFRA = 11;
+  OBSTACLE = 12;
+  DEFECT = 13;
+  OTHER = 14;
+}
+
+enum SubClass {
+  UNKNOWN_SUBCLASS = 0;
+  OTHER_SUBCLASS = 1;
+  ADULT = 2;
+  KID = 3;
+  LOCO = 4;
+  HALF = 5;
+  BOX_CARRIAGE = 6;
+  CISTERN = 7;
+  HOPPER = 8;
+  PLATFORM_CARRIAGE = 9;
+  DUMP = 10;
+  OTHER_CARRIAGE = 11;
+  CAR = 12;
+  VAN = 13;
+  TRUCK = 14;
+  TRACTOR = 15;
+  BUS = 16;
+  MOTO = 17;
+  BIKE = 18;
+  OFF = 19;
+  GREEN = 20;
+  YELLOW = 21;
+  YELLOW_BLINKING = 22;
+  TWO_YELLOW = 23;
+  TWO_YELLOW_BLINKING = 24;
+  RED = 25;
+  BLUE = 26;
+  WHITE = 27;
+  FACING_LEFT = 28;
+  FACING_RIGHT = 29;
+  TRAILING_LEFT = 30;
+  TRAILING_RIGHT = 31;
+  STOP = 32;
+  WHISTLE = 33;
+  DANGER_ZONE_START = 34;
+  DANGER_ZONE_END = 35;
+  YELLOW_SQUARE = 36;
+  RED_RECTANGLE = 37;
+  RED_LIGHT = 38;
+  RED_FLAG = 39;
+  SUPPORT = 40;
+  JOINT = 41;
+  DEADEND = 42;
+  PLATFORM = 43;
+  PICKET = 44;
+  BRIDGE = 45;
+  CROSSING = 46;  
+  TUNNEL = 47;    
+  REFERENCE = 48; 
+  BALISE = 49;    
+  GENERATOR = 50; 
+  RECEIVER = 51;
+  BRAKE_SHOE = 52;
+  STROLLER = 53;
+  FALLEN_TREE = 54;
+  BOX = 55;
+  STONE = 56;
+  CONE = 57;
+  CART = 58;
+  COW = 59;
+  HORSE = 60;
+  DEER = 61;
+}
+
+enum SensorMeasurementType
+{
+  None = 0;
+  Camera = 1;
+  Lidar = 2;
+  Both = 3;
+}
+
+message Vector3 {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message Twist {
+  Vector3 linear = 1;
+  Vector3 angular = 2;
+}
+
+message Detection2D {
+  uint64 id = 1;
+  optional Class class = 2;       // obstacle class
+  optional SubClass sub_class = 3;  // obstacle sub_class
+  repeated Tag property = 4;
+  repeated Point2D keypoint = 5;
+  BBox2D bbox = 6;
+  string label = 7;
+  Twist velocity = 8;
+}
+
+message Detection3D {
+  optional int64 id = 1;  // obstacle ID.
+
+  optional Point3D position = 2; // obstacle position in the global coordinate system.
+  optional Point3D orientation = 3;  // orientation in the global coordinate system.
+  optional Point3D velocity = 4;  // obstacle velocity.
+  optional Point3D acceleration = 5;  // obstacle acceleration
+
+  // Size of obstacle bounding box.
+  optional double length = 6;  // obstacle length.
+  optional double width = 7;   // obstacle width.
+  optional double height = 8;  // obstacle height.
+
+  // duration of an obstacle since detection in s.
+  optional double tracking_time = 9;
+  optional Class class = 10;       // obstacle class
+  optional SubClass sub_class = 11;  // obstacle sub_class
+  optional BBox2D bbox2d = 12;
+
+  repeated Point3D polygon_point = 13;  // obstacle corner points.
+
+  repeated Point3D drops = 14; // trajectory of object.
+  repeated SensorMeasurement measurements = 15;  // sensor measurements
+
+  // position covariance which is a row-majored 3x3 matrix
+  repeated double position_covariance = 16 [packed = true];
+  // velocity covariance which is a row-majored 3x3 matrix
+  repeated double velocity_covariance = 17 [packed = true];
+  // acceleration covariance which is a row-majored 3x3 matrix
+  repeated double acceleration_covariance = 18 [packed = true];
+
+
+  // orthogonal distance between obstacle lowest point and ground plane
+  optional double height_above_ground = 19;
+  
+  optional LightStatus light_status = 20; // lights of vehicles
+  optional SensorMeasurementType sensor_measurement_type = 21;
+  optional Point3D local_position = 22; // obstacle position in the local coordinate system.
+  optional Quaternion local_rotation = 23; // orientation in the local coordinate system.
+  optional string sign_class = 24;
+
+  repeated Tag property = 25;
+
+  optional bool is_visible = 26; // only for signs and traffic lights, true if detection is turned by it's face side
+
+  optional Zone zone = 27;
+}
+
+message PointENU {
+  optional double x = 1;  
+  optional double y = 2;  
+  optional double z = 3;                                          
+}
+
+message PointLLH {
+  // Longitude in degrees, ranging from -180 to 180.
+  optional double lon = 1;
+  // Latitude in degrees, ranging from -90 to 90.
+  optional double lat = 2;
+  // WGS-84 ellipsoid height in meters.
+  optional double height = 3;
+}
+
+message Point2D {
+  optional double x = 1;
+  optional double y = 2;
+}
+
+message Point3D {
+  optional double x = 1;
+  optional double y = 2;
+  optional double z = 3;
+}
+
+message Quaternion {
+  optional double qx = 1;
+  optional double qy = 2;
+  optional double qz = 3;
+  optional double qw = 4;
+}
+
+// A general polygon, points are counter clockwise
+message Polygon {
+  repeated Point3D point = 1;
+}
+
+message Pose
+{
+    Point3D position = 1;
+    Quaternion orientation = 2;
+}
+
+message Header {
+  // Message publishing time in microseconds.
+  optional uint64 timestamp = 1;
+  // Sequence number for each message. Each module maintains its own counter for
+  // sequence_num, always starting from 1 on boot.
+  optional uint32 sequence_num = 2;
+  optional string frame_id = 3;
+  optional float time_scale = 4;
+}
+
+message PointXYZIT {
+  optional float x = 1;
+  optional float y = 2;
+  optional float z = 3;
+  optional uint32 intensity = 4;
+  optional uint64 timestamp = 5;
+  optional uint32 laser_id = 10;
+}
+
+message PointCloudData {
+  optional bytes xyz_double = 1;          
+  optional bytes intensity_uint8 = 2;
+  optional bytes timestamp_ns_uint64 = 3;
+  optional uint32 points_size = 4;
+}
+
+message PointCloud {
+  optional Header header = 1;
+  optional bool is_dense = 2;
+  repeated PointXYZIT point = 3;
+  optional uint32 width = 4;
+  optional uint32 height = 5;
+  optional PointCloudData data = 6;
+}
+
+message Image {
+  optional Header header = 1;
+
+  optional uint32 height = 2;  // image height, that is number of rows
+  optional uint32 width = 3;   // image width, that is number of columns
+
+  optional string encoding = 4;
+  optional uint32 step = 5;  // Full row length in bytes
+  optional bytes data = 6;   // actual matrix data, size is (step * rows)
+}
+
+message CompressedImage {
+  optional Header header = 1;
+  // Specifies the format of the data
+  // Acceptable values: jpeg, png
+  optional string format = 2;
+  optional bytes data = 3;  // Compressed image buffer
+  optional uint32 frame_type = 4;
+}
+
+message CameraStatus {
+  optional Header header = 1;
+  optional string id = 2;
+  optional bool ready_status = 3;
+  // optional bool sync_status = 4;
+  optional uint32 packet_size = 5;
+}
+
+message SyncMessage {
+  optional uint64 sync_trigger_timestamp = 1;
+}
+
+message Detection2DArray {
+  Header header = 1;
+  string sensor_id = 2;
+  repeated Detection2D detections = 3;
+}
+
+message BoundingBox3D {
+  Pose position = 1;
+  Pose local_position = 2;
+  Vector3 size = 3;
+  repeated Vector3 vertex_points = 4;
+}
+
+message Detection3DArray {
+  Header header = 1;
+  repeated Detection3D detections = 2;
+}
+
+message DetectionRailwayArray {
+  Header header = 1;
+  repeated Point3D points = 2;
+}
+
+message BBox2D {
+  optional int32 xmin = 1;  // in pixels.
+  optional int32 ymin = 2;  // in pixels.
+  optional int32 xmax = 3;  // in pixels.
+  optional int32 ymax = 4;  // in pixels.
+}
+
+message LightStatus {
+  optional double brake_visible = 1;
+  optional double brake_switch_on = 2;
+  optional double left_turn_visible = 3;
+  optional double left_turn_switch_on = 4;
+  optional double right_turn_visible = 5;
+  optional double right_turn_switch_on = 6;
+}
+
+message SensorMeasurement {
+  optional string sensor_id = 1;
+  optional int32 id = 2;
+
+  optional Point3D position = 3;
+  optional double theta = 4;
+  optional double length = 5;
+  optional double width = 6;
+  optional double height = 7;
+
+  optional Point3D velocity = 8;
+
+  optional Class class = 9;
+  optional SubClass sub_class = 10;
+  optional double timestamp = 11;
+  optional BBox2D box = 12;  // only for camera measurements
+}
+
+message TrajectoryPoint {
+  // path point
+  optional PathPoint path_point = 1;
+  // linear velocity
+  optional double v = 2;  // in [m/s]
+  // linear acceleration
+  optional double a = 3;
+  // relative time from beginning of the trajectory
+  optional double relative_time = 4;
+  // longitudinal jerk
+  optional double da = 5;
+  // The angle between vehicle front wheel and vehicle longitudinal axis
+  optional double steer = 6;
+
+  // Gaussian probability information
+  optional GaussianInfo gaussian_info = 7;
+}
+
+message GaussianInfo {
+  // Information of gaussian distribution
+  optional double sigma_x = 1;
+  optional double sigma_y = 2;
+  optional double correlation = 3;
+  // Information of representative uncertainty area
+  optional double area_probability = 4;
+  optional double ellipse_a = 5;
+  optional double ellipse_b = 6;
+  optional double theta_a = 7;
+}
+
+message Trajectory {
+  optional double probability = 1;  // probability of this trajectory
+  repeated TrajectoryPoint trajectory_point = 2;
+}
+
+message GnssNavPvt {
+  optional Header header = 1;
+  optional double t_acc = 2; // Time accuracy estimate (UTC) 
+  optional double nano = 3;
+  optional uint32 fix_type = 4;
+  optional bool gnss_fix_ok = 5;
+  optional bool diff_soln = 6;
+  optional uint32 psm_state = 7;
+  optional bool head_veh_valid = 8;
+  optional uint32 carrSoln = 9;
+  optional uint32 num_sv = 10;
+  optional double lat = 11;
+  optional double lon = 12;
+  optional double height = 13;
+  optional double height_msl = 14;
+  optional double h_acc = 15;
+  optional double v_acc = 16;
+  optional double vel_n = 17;
+  optional double vel_e = 18;
+  optional double vel_d = 19;
+  optional double g_speed = 20;
+  optional double head_mot = 21;
+  optional double s_acc = 22;
+  optional double head_acc = 23;
+  optional double pdop = 24;
+  optional double last_correction_age = 25;
+}
+
+message VehicleSignal {
+  enum TurnSignal {
+    TURN_NONE = 0;
+    TURN_LEFT = 1;
+    TURN_RIGHT = 2;
+  };
+  optional TurnSignal turn_signal = 1;
+  // lights enable command
+  optional bool high_beam = 2;
+  optional bool low_beam = 3;
+  optional bool horn = 4;
+  optional bool emergency_light = 5;
+}
+
+message Sonar {
+  optional double range = 1;         // Meter
+  optional Point3D translation = 2;  // Meter
+  optional Quaternion rotation = 3;
+}
+
+message OusterImu {
+  optional Header header = 1;
+  optional uint64 imu_diagnostic_time_ns = 2;
+  optional uint64 acc_read_time_ns = 3;
+  optional uint64 gyro_read_time_ns = 4;
+  optional Point3D acc = 5;
+  optional Point3D ang_vel = 6;
+}
+
+message ClusterListStatus_600 {
+  optional int32 near = 1;
+  optional int32 far = 2;
+  optional int32 meas_counter = 3;
+  optional int32 interface_version = 4;
+}
+
+message ObjectListStatus_60A {
+  optional int32 nof_objects = 1;
+  optional int32 meas_counter = 2;
+  optional int32 interface_version = 3;
+}
+
+enum OutputType {
+  OUTPUT_TYPE_NONE = 0;
+  OUTPUT_TYPE_OBJECTS = 1;
+  OUTPUT_TYPE_CLUSTERS = 2;
+  OUTPUT_TYPE_ERROR = 3;
+}
+
+enum RcsThreshold {
+  RCS_THRESHOLD_STANDARD = 0;
+  RCS_THRESHOLD_HIGH_SENSITIVITY = 1;
+  RCS_THRESHOLD_ERROR = 2;
+}
+
+enum MotionRxState {
+  INPUT_OK = 0;
+  SPEED_MISSING = 1;
+  YAW_RATE_MISSING = 2;
+  SPEED_AND_YAW_RATE_MISSING = 3;
+}
+
+message RadarState_201 {
+  optional uint32 max_distance = 1;
+  optional uint32 radar_power = 2;
+  optional OutputType output_type = 3;
+  optional RcsThreshold rcs_threshold = 4;
+  optional bool send_quality = 5;
+  optional bool send_ext_info = 6;
+  optional MotionRxState motion_rx_state = 7;
+}
+
+message ContiRadarObs {
+  //                x axis  ^
+  //                        | longitude_dist
+  //                        |
+  //                        |
+  //                        |
+  //          lateral_dist  |
+  //          y axis        |
+  //        <----------------
+  //        ooooooooooooo   //radar front surface
+
+  optional Header header = 1;
+  optional bool clusterortrack = 2;  // 0 = track, 1 = cluster
+  optional int32 obstacle_id = 3;    // obstacle Id
+  // longitude distance to the radar; (+) = forward; unit = m
+  optional double longitude_dist = 4;
+  // lateral distance to the radar; (+) = left; unit = m
+  optional double lateral_dist = 5;
+  // longitude velocity to the radar; (+) = forward; unit = m/s
+  optional double longitude_vel = 6;
+  // lateral velocity to the radar; (+) = left; unit = m/s
+  optional double lateral_vel = 7;
+  // obstacle Radar Cross-Section; unit = dBsm
+  optional double rcs = 8;
+  // 0 = moving, 1 = stationary, 2 = oncoming, 3 = stationary candidate
+  // 4 = unknown, 5 = crossing stationary, 6 = crossing moving, 7 = stopped
+  optional int32 dynprop = 9;
+  // longitude distance standard deviation to the radar; (+) = forward; unit = m
+  optional double longitude_dist_rms = 10;
+  // lateral distance standard deviation to the radar; (+) = left; unit = m
+  optional double lateral_dist_rms = 11;
+  // longitude velocity standard deviation to the radar; (+) = forward; unit =
+  // m/s
+  optional double longitude_vel_rms = 12;
+  // lateral velocity standard deviation to the radar; (+) = left; unit = m/s
+  optional double lateral_vel_rms = 13;
+  // obstacle probability of existence
+  optional double probexist = 14;
+
+  // The following is only valid for the track object message
+  // 0 = deleted, 1 = new, 2 = measured, 3 = predicted, 4 = deleted for, 5 = new
+  // from merge
+  optional int32 meas_state = 15;
+  // longitude acceleration to the radar; (+) = forward; unit = m/s2
+  optional double longitude_accel = 16;
+  // lateral acceleration to the radar; (+) = left; unit = m/s2
+  optional double lateral_accel = 17;
+  // orientation angle to the radar; (+) = counterclockwise; unit = degree
+  optional double oritation_angle = 18;
+  // longitude acceleration standard deviation to the radar; (+) = forward; unit
+  // = m/s2
+  optional double longitude_accel_rms = 19;
+  // lateral acceleration standard deviation to the radar; (+) = left; unit =
+  // m/s2
+  optional double lateral_accel_rms = 20;
+  // orientation angle standard deviation to the radar; (+) = counterclockwise;
+  // unit = degree
+  optional double oritation_angle_rms = 21;
+  optional double length = 22;  // obstacle length; unit = m
+  optional double width = 23;   // obstacle width; unit = m
+  // 0: point; 1: car; 2: truck; 3: pedestrian; 4: motorcycle; 5: bicycle; 6:
+  // wide; 7: unknown
+  optional int32 obstacle_class = 24;
+}
+
+message ContiRadar {
+  optional Header header = 1;
+  repeated ContiRadarObs contiobs = 2;  // conti radar obstacle array
+  optional RadarState_201 radar_state = 3;
+  optional ClusterListStatus_600 cluster_list_status = 4;
+  optional ObjectListStatus_60A object_list_status = 5;
+}
+
+message PathPoint {
+  // coordinates
+  optional double x = 1;
+  optional double y = 2;
+  optional double z = 3;
+
+  // direction on the x-y plane
+  optional double theta = 4;
+  // curvature on the x-y planning
+  optional double kappa = 5;
+  // accumulated distance from beginning of the path
+  optional double s = 6;
+
+  // derivative of kappa w.r.t s.
+  optional double dkappa = 7;
+  // derivative of derivative of kappa w.r.t s.
+  optional double ddkappa = 8;
+  // The lane ID where the path point is on
+  optional string lane_id = 9;
+
+  // derivative of x and y w.r.t parametric parameter t in CosThetareferenceline
+  optional double x_derivative = 10;
+  optional double y_derivative = 11;
+}
+
+message Tag {
+  string model_name = 1;
+}
+
+enum Zone {
+  RED_ZONE = 0;
+  YELLOW_ZONE = 1;
+  GREEN_ZONE = 2;
+  NULL = 3;
+}

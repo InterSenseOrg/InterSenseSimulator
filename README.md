@@ -2,6 +2,14 @@
 
 [<img src="docs/images/header.png" width="850"/>](docs/images/header.png) 
 
+<div align="center">
+  <h4>
+   <a href="https://github.com/InterSenseOrg/InterSenseSimulator/releases/latest" style="text-decoration: 
+   none">Download Release</a> 
+  </h4>
+</div>
+
+
 ## Introduction
 InterSense simulator has been designed for autonomous systems developers. Simulator could be used in development, testing, training and validation processes of autonomous systems in close to real operational conditions. 
 It significantly decreases the cost of autonomous systems development process, particularly in tuning and testing of the sensor equipment, control system and interaction with other static and dynamic objects.
