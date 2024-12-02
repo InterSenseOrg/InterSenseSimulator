@@ -35,7 +35,7 @@ Figure below shows `Sensor Settings` where each sensor parameter can be configur
 
 ## Automated Testing API
 
-The simulator supports Python API functionality for carrying out 24/7 inifinite tests. It allows to handle scene objects, sensor parameters, environment, vehicle state and etc.
+The simulator supports Python API functionality for carrying out 24/7 infinite tests. It allows to handle scene objects, sensor parameters, environment, vehicle state and etc.
 
 ## Foxglove connection and visualization
 
